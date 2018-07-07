@@ -56,7 +56,6 @@ public class FTPUtils {
             ftpClient.connect(server, port);
             stat = true;
         } catch (IOException e) {
-            System.out.println("59-------------");
             stat = false;
             e.printStackTrace();
         }
@@ -87,7 +86,6 @@ public class FTPUtils {
                 stat = false;
             }
         } catch (IOException e) {
-            System.out.println("90-------------");
             e.printStackTrace();
             close();
             stat = false;
