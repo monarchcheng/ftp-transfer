@@ -1,7 +1,2 @@
 server:
   port: 8888
-ftp:
-  server: 10.1.14.146
-  port: 21
-  username: anonymous
-  password: anonymous

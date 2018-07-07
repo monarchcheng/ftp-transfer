@@ -13,14 +13,10 @@ import java.io.IOException;
 @RestController
 public class FtpTransferController {
 
-    @Autowired
-    private FTPUtils ftpUtils;
-
-
     @RequestMapping("/getpic")
     public void ftpTransfer(@RequestParam String url, HttpServletResponse response){
         try {
-            ftpUtils.transfer(response.getOutputStream(),url);
+            FTPUtils.transfer(response.getOutputStream(),url);
         }catch (IOException e){
             e.printStackTrace();
         }

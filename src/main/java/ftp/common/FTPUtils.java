@@ -2,58 +2,36 @@ package ftp.common;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
+import java.util.Map;
 
-@Component
 public class FTPUtils {
 
     private FTPUtils(){
 
     }
 
-    private FTPClient ftpClient = new FTPClient();
+    private static FTPClient ftpClient = new FTPClient();
 
-    private String server;
+    private static FtpProperties ftp;
 
-    private int port;
-
-    private String userName;
-
-    private String userPassword;
-
-    @Value("${ftp.server}")
-    public void setServer(String server) {
-        this.server = server;
-    }
-
-    @Value("${ftp.port}")
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    @Value("${ftp.username}")
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    @Value("${ftp.password}")
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
+    static{
+        Yaml yaml = new Yaml();
+        ftp = yaml.loadAs("ftp.yml", FtpProperties.class);
     }
 
     /**
      * 连接FTP服务器
      * @return
      */
-    private boolean connect(){
+    private static boolean connect(){
         boolean stat;
         try {
             if(ftpClient.isConnected())
                 return true;
-            ftpClient.connect(server, port);
+            ftpClient.connect(ftp.getServer(), ftp.getPort());
             stat = true;
         } catch (IOException e) {
             stat = false;
@@ -66,7 +44,7 @@ public class FTPUtils {
      * 打开FTP服务器
      * @return
      */
-    private boolean open(){
+    private static boolean open(){
         System.out.println(ftpClient.getReplyCode());
         if (FTPReply.isPositiveCompletion(ftpClient.getReplyCode())){
             return true;
@@ -78,7 +56,7 @@ public class FTPUtils {
 
         boolean stat;
         try {
-            stat = ftpClient.login(userName, userPassword);
+            stat = ftpClient.login(ftp.getUserName(), ftp.getPassword());
             // 检测连接是否成功
             int reply = ftpClient.getReplyCode();
             if (!FTPReply.isPositiveCompletion(reply)) {
@@ -97,7 +75,7 @@ public class FTPUtils {
     /**
      * 关闭FTP服务器
      */
-    private void close(){
+    private static void close(){
         try {
             if(ftpClient != null){
                 if(ftpClient.isConnected()){
@@ -118,7 +96,7 @@ public class FTPUtils {
      * @param ftpFile
      * @return
      */
-    public void transfer(OutputStream outputStream,String ftpFile) {
+    public static void transfer(OutputStream outputStream,String ftpFile) {
         try {
             boolean open = open();
             if(open){
