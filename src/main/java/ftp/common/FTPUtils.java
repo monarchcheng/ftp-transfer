@@ -5,7 +5,6 @@ import org.apache.commons.net.ftp.FTPReply;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
-import java.util.Map;
 
 public class FTPUtils {
 
@@ -19,7 +18,11 @@ public class FTPUtils {
 
     static{
         Yaml yaml = new Yaml();
-        ftp = yaml.loadAs("ftp.yml", FtpProperties.class);
+        try{
+            ftp =new FtpProperties(yaml.load(new FileInputStream(FTPUtils.class.getResource("/ftp.yml").getPath())));
+        }catch (FileNotFoundException e){
+            throw new RuntimeException(e);
+        }
     }
 
     /**

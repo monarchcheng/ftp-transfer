@@ -1,5 +1,7 @@
 package ftp.common;
 
+import java.util.Map;
+
 public class FtpProperties {
 
     private String server;
@@ -9,6 +11,8 @@ public class FtpProperties {
     private String userName;
 
     private String password;
+
+    private Map<String, String> properties;
 
     public FtpProperties(String server, int port, String userName, String password) {
         this.server = server;
@@ -49,4 +53,10 @@ public class FtpProperties {
         this.password = password;
     }
 
+    FtpProperties(Map<String, Object> properties) {
+        this.server = properties.get("server").toString();
+        this.port = Integer.valueOf(properties.get("port").toString());
+        this.userName = properties.get("userName").toString();
+        this.password = properties.get("password").toString();
+    }
 }
