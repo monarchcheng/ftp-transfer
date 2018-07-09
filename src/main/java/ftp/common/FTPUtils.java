@@ -48,7 +48,6 @@ public class FTPUtils {
      * @return
      */
     private static boolean open(){
-        System.out.println(ftpClient.getReplyCode());
         if (FTPReply.isPositiveCompletion(ftpClient.getReplyCode())){
             return true;
         }
